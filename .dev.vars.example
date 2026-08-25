@@ -1,2 +1,5 @@
 # Load .env.development* files when running `wrangler dev`
 NEXTJS_ENV=development
+
+# Optional for future signed-session support. Current auth uses D1-backed session IDs.
+# SESSION_SECRET=
