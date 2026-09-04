@@ -901,4 +901,4 @@ When working with this PRD:
 **Last Updated:** September 4, 2026
 **Current Phase:** Sprint 2 complete — all three phases delivered
 **Status:** COMPLETED
-**Next Steps:** Manual QA with `npm run preview`; push and verify deployed Workers runtime
+**Next Steps:** Run `npm run preview` locally (WSL recommended on Windows) to verify Workers runtime; plan Sprint 3 for quiz assembly or attempt UI

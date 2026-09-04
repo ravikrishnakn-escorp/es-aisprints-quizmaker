@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { MoreVertical } from "lucide-react";
 
 import { DeleteMcqDialog } from "@/components/mcq/delete-mcq-dialog";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { deleteMcqRequest, fetchMcqs } from "@/lib/api/mcq-client";
 import type { McqListItem } from "@/lib/services/mcq";
@@ -145,7 +145,9 @@ export function McqTable({ initialMcqs }: McqTableProps) {
 					<h2 className="text-lg font-medium">Questions</h2>
 					<p className="text-sm text-muted-foreground">Manage your multiple-choice questions.</p>
 				</div>
-				<Button render={<Link href="/dashboard/questions/new" />}>Create New Question</Button>
+				<Link href="/dashboard/questions/new" className={buttonVariants()}>
+					Create New Question
+				</Link>
 			</div>
 
 			{error ? (

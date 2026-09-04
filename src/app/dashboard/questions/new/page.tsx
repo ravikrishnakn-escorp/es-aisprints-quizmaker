@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { McqForm } from "@/components/mcq/mcq-form";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireAuth } from "@/lib/auth/current-user";
 
@@ -11,9 +11,9 @@ export default async function NewQuestionPage() {
 	return (
 		<main className="min-h-screen bg-background px-4 py-8">
 			<div className="mx-auto w-full max-w-3xl space-y-4">
-				<Button render={<Link href="/dashboard" />} variant="outline" size="sm">
+				<Link href="/dashboard" className={buttonVariants({ variant: "outline", size: "sm" })}>
 					Back to dashboard
-				</Button>
+				</Link>
 				<Card>
 					<CardHeader>
 						<CardTitle>Create New Question</CardTitle>
