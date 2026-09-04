@@ -11,10 +11,11 @@ the problem, the primary user, and the current state. Two or three sentences.
 Keep it current. An out-of-date description here misleads every future conversation.
 -->
 
-Quiz Maker is a web application for creating and taking quizzes. The authentication
-module is implemented: users can sign up, sign in, log out, and access protected routes.
-The technical PRD in `ai-workspace/Quiz Maker Technical PRD.md` is the source of truth
-for scope and future work.
+Quiz Maker is a web application for creating and taking quizzes. Sprint 1 delivered
+authentication (sign up, sign in, log out, protected routes). Sprint 2 delivered MCQ
+CRUD: admins can create, list, edit, and delete multiple-choice questions from the
+dashboard via REST API and D1-backed services. The technical PRD in
+`ai-workspace/Quiz Maker Technical PRD.md` is the source of truth for scope and future work.
 
 ## Stack
 
@@ -25,11 +26,12 @@ for scope and future work.
 - **TypeScript** in strict mode
 - **Wrangler** for Cloudflare configuration, secrets, and deployment
 
-- **Cloudflare D1** for user and session storage (binding `DB` in `wrangler.jsonc`)
+- **Cloudflare D1** for user, session, and MCQ storage (binding `DB` in `wrangler.jsonc`)
 - **Zod** for server-side form validation
+- **Vitest** + **Testing Library** for unit, integration, API contract, and component tests
 
-No testing framework or AI SDK is installed yet. Do not write code that imports one
-without adding it first and telling the user.
+No AI SDK is installed yet. Do not write code that imports one without adding it first
+and telling the user.
 
 ## Layout
 
@@ -53,6 +55,7 @@ Import through the `@/` alias, which maps to `src/`.
 | `npm run preview` | Build and run on the local **Workers** runtime |
 | `npm run build` | Production build |
 | `npm run lint` | ESLint |
+| `npm run test` | Vitest (unit, integration, API, component) |
 | `npm run deploy` | Build and deploy to Cloudflare |
 | `npm run cf-typegen` | Regenerate `cloudflare-env.d.ts` after changing bindings |
 
@@ -70,8 +73,9 @@ anything runtime-sensitive with `npm run preview`.
 - **Keep secrets out of the repo.** Local values belong in `.dev.vars`, which is
   gitignored. When adding a variable, also add an empty placeholder to
   `.dev.vars.example`. Production values go in `wrangler secret put`.
-- **Verify before claiming completion.** Run `npm run lint` and `npm run build` and
-  report the actual result. Do not describe work as done based on inspection alone.
+- **Verify before claiming completion.** Run `npm run test`, `npm run lint`, and
+  `npm run build` and report the actual result. Do not describe work as done based on
+  inspection alone.
 - **Say when you are unsure.** A flagged uncertainty is more useful than a confident
   guess that has to be unwound later.
 
@@ -79,7 +83,7 @@ anything runtime-sensitive with `npm run preview`.
 
 Cloud agents have no Cloudflare credentials and no `.dev.vars`. In that environment:
 
-- `npm run dev`, `npm run build`, and `npm run lint` work normally.
+- `npm run dev`, `npm run build`, `npm run lint`, and `npm run test` work normally.
 - `npm run preview`, `npm run deploy`, and any `wrangler` command that needs
   authentication will fail. This is expected. Do not try to authenticate.
 - If a task genuinely requires Cloudflare access, stop and report that it must be run

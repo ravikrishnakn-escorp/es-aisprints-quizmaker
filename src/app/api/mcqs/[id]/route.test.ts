@@ -145,6 +145,23 @@ describe("Phase 2: /api/mcqs/[id] route", () => {
 		expect(body.error.code).toBe("MCQ_NOT_FOUND");
 	});
 
+	it("returns 409 when updating an MCQ that already has attempts", async () => {
+		mocks.updateMcqMock.mockRejectedValueOnce(new Error("MCQ_HAS_ATTEMPTS"));
+
+		const response = await PUT(
+			new Request("http://localhost/api/mcqs/mcq-1", {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(validPayload),
+			}),
+			routeContext,
+		);
+		const body = await response.json();
+
+		expect(response.status).toBe(409);
+		expect(body.error.code).toBe("MCQ_HAS_ATTEMPTS");
+	});
+
 	it("returns 204 when deleting an existing MCQ", async () => {
 		mocks.deleteMcqMock.mockResolvedValueOnce(undefined);
 

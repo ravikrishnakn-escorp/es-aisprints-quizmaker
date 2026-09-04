@@ -172,4 +172,24 @@ describe("Phase 3: MCQ form", () => {
 		expect(screen.getByLabelText("Choice 1")).toHaveValue("3");
 		expect(screen.getByLabelText("Choice 2")).toHaveValue("4");
 	});
+
+	it("submits update payload to the API in edit mode", async () => {
+		const user = userEvent.setup();
+		render(<McqForm mode="edit" mcqId="mcq-1" initialData={initialData} />);
+
+		await user.clear(screen.getByLabelText("Question Name"));
+		await user.type(screen.getByLabelText("Question Name"), "Updated Question");
+		await user.click(screen.getByRole("button", { name: "Save" }));
+
+		await waitFor(() => {
+			expect(mocks.updateMcqRequestMock).toHaveBeenCalledWith("mcq-1", {
+				name: "Updated Question",
+				question: "What is 2 + 2?",
+				choices: [
+					{ choice_text: "3", is_correct: false },
+					{ choice_text: "4", is_correct: true },
+				],
+			});
+		});
+	});
 });

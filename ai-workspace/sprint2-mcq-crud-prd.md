@@ -768,6 +768,7 @@ export default async function DashboardPage() {
 - [x] Unauthenticated requests to any `/api/mcqs/**` endpoint return 401
 - [x] `POST /api/mcqs` with invalid payload returns 400 with structured error body
 - [x] `POST /api/mcqs/:id/attempts` rejects a `selected_choice_id` that does not belong to the MCQ
+- [x] `PUT /api/mcqs/:id` returns 409 when the MCQ already has attempts (`MCQ_HAS_ATTEMPTS`)
 - [x] Route handlers contain no direct SQL — all logic delegated to `MCQService`
 - [x] `npm run build` succeeds
 
@@ -781,7 +782,21 @@ export default async function DashboardPage() {
 - [x] Cancel returns to dashboard without persisting
 - [x] All Phase 3 component tests pass
 - [x] `npm run lint` passes
-- [ ] MCQ flows work under `npm run preview` (Workers runtime)
+- [ ] MCQ flows work under `npm run preview` (Workers runtime) — manual local verification; use WSL on Windows if `.open-next` cleanup fails
+
+### Test suite summary (Sprint 2 closure)
+
+| Area | Test files | Tests |
+|------|------------|-------|
+| Validation | `mcq.test.ts` | 9 |
+| Service (mock D1) | `mcq.persistence.test.ts`, `mcq.test.ts` | 16 |
+| API errors/client | `mcq-errors.test.ts`, `mcq-client.test.ts`, `auth.test.ts` | 13 |
+| API routes | `route.test.ts` (list/create, by-id, attempts) | 17 |
+| UI components/pages | `mcq-table`, `mcq-form`, dashboard + question pages | 23 |
+| **Sprint 2 subtotal** | | **78** |
+| **Full repo** | 24 files | **132** (all passing) |
+
+Run `npm run test` before marking any phase complete.
 
 ---
 
@@ -901,4 +916,5 @@ When working with this PRD:
 **Last Updated:** September 4, 2026
 **Current Phase:** Sprint 2 complete — all three phases delivered
 **Status:** COMPLETED
+**Test status:** 132/132 passing (`npm run test`); `npm run lint` and `npm run build` green
 **Next Steps:** Run `npm run preview` locally (WSL recommended on Windows) to verify Workers runtime; plan Sprint 3 for quiz assembly or attempt UI

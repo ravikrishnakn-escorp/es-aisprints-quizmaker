@@ -98,4 +98,21 @@ describe("Phase 2: MCQ service integration", () => {
 		expect(unchanged?.name).toBe(validInput.name);
 		expect(unchanged?.choices).toHaveLength(2);
 	});
+
+	it("rejects updates when attempts already exist for the MCQ", async () => {
+		seedMcqUser();
+		const created = await createMcq("user-1", validInput);
+		const correctChoice = created.choices.find((choice) => choice.is_correct)!;
+
+		await recordAttempt(created.id, "user-1", {
+			selected_choice_id: correctChoice.id,
+		});
+
+		await expect(
+			updateMcq(created.id, {
+				...validInput,
+				name: "Blocked Update",
+			}),
+		).rejects.toThrow("MCQ_HAS_ATTEMPTS");
+	});
 });
