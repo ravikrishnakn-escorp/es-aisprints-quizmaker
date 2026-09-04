@@ -497,9 +497,11 @@ Each phase follows **Test-Driven Architecture (TDA)**: define failing tests firs
 
 ---
 
-### Phase 2: Services & API Endpoint Layers — PLANNED
+### Phase 2: Services & API Endpoint Layers — COMPLETED
 
 **Objective:** Expose `MCQService` through authenticated REST route handlers. Route handlers validate input, check auth, call the service, and map results to HTTP responses. No business logic in route files.
+
+**Completed:** September 4, 2026
 
 **Architecture:**
 
@@ -760,12 +762,12 @@ export default async function DashboardPage() {
 
 ### Phase 2 — API
 
-- [ ] All five API endpoints are implemented and covered by contract tests
-- [ ] Unauthenticated requests to any `/api/mcqs/**` endpoint return 401
-- [ ] `POST /api/mcqs` with invalid payload returns 400 with structured error body
-- [ ] `POST /api/mcqs/:id/attempts` rejects a `selected_choice_id` that does not belong to the MCQ
-- [ ] Route handlers contain no direct SQL — all logic delegated to `MCQService`
-- [ ] `npm run build` succeeds
+- [x] All five API endpoints are implemented and covered by contract tests
+- [x] Unauthenticated requests to any `/api/mcqs/**` endpoint return 401
+- [x] `POST /api/mcqs` with invalid payload returns 400 with structured error body
+- [x] `POST /api/mcqs/:id/attempts` rejects a `selected_choice_id` that does not belong to the MCQ
+- [x] Route handlers contain no direct SQL — all logic delegated to `MCQService`
+- [x] `npm run build` succeeds
 
 ### Phase 3 — UI
 
@@ -895,6 +897,6 @@ When working with this PRD:
 ## Current Status
 
 **Last Updated:** September 4, 2026
-**Current Phase:** Phase 2 — Services & API Endpoint Layers
-**Status:** PLANNED (Phase 1 complete)
-**Next Steps:** Write failing API contract tests, then implement `/api/mcqs` route handlers
+**Current Phase:** Phase 3 — Frontend Architecture & UI Design
+**Status:** PLANNED (Phase 2 complete)
+**Next Steps:** Write failing component tests, then expand Dashboard into MCQ table and create/edit forms
