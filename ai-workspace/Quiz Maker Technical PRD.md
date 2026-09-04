@@ -1,5 +1,5 @@
 Date created: August 25, 2026
-Date last modified: August 25, 2026
+Date last modified: September 4, 2026
 
 # Quiz Maker Technical PRD
 
@@ -610,12 +610,9 @@ The following are explicitly **not** part of Sprint 0 or the authentication spri
 - Audit logging of authentication events
 - "Remember me" / long-lived sessions beyond standard session policy
 - Internationalization (i18n)
-- Automated test suite definition (may be added in implementation; not part of this PRD)
-
 ---
 
 ## Future Enhancements
-
 These may be addressed in later sprints after core authentication is stable:
 
 | Enhancement | Rationale |
@@ -761,10 +758,113 @@ Exact variable names will be documented in `.dev.vars.example` during implementa
 2. Verify responsive layout and accessibility basics
 3. Verify auth under `npm run preview` (Workers runtime)
 4. Run lint and build
+5. Add automated test suite with Vitest covering all four implementation phases
+6. Run `npm run test` and record results in this PRD
 
 **Deliverables:**
 - All acceptance criteria checked
 - Auth module ready for quiz features in subsequent sprints
+- Automated test suite (54 tests across 10 files) passing via `npm run test`
+
+---
+
+---
+
+## Automated Test Suite
+
+**Framework:** Vitest with Testing Library (jsdom)  
+**Run command:** `npm run test`  
+**Last run:** September 4, 2026 — **54 tests passed** across 10 test files
+
+Tests are colocated with the code they verify. They mock external boundaries (D1, cookies, navigation) and do not change application behavior.
+
+### Phase 1: Foundation
+
+| Test ID | Scenario | File | Status |
+|---------|----------|------|--------|
+| T1-01 | Password hashing produces `salt:hash` format | `src/lib/services/password.test.ts` | Pass |
+| T1-02 | Correct password verifies against stored hash | `src/lib/services/password.test.ts` | Pass |
+| T1-03 | Incorrect password is rejected | `src/lib/services/password.test.ts` | Pass |
+| T1-04 | Malformed stored hash is rejected | `src/lib/services/password.test.ts` | Pass |
+| T1-05 | User created with normalized email | `src/lib/services/persistence.test.ts` | Pass |
+| T1-06 | Password stored as hash, not plain text | `src/lib/services/persistence.test.ts` | Pass |
+| T1-07 | Duplicate email throws `EMAIL_ALREADY_EXISTS` | `src/lib/services/persistence.test.ts` | Pass |
+| T1-08 | User lookup is case-insensitive | `src/lib/services/persistence.test.ts` | Pass |
+| T1-09 | Missing user returns null | `src/lib/services/persistence.test.ts` | Pass |
+| T1-10 | Session created for authenticated user | `src/lib/services/persistence.test.ts` | Pass |
+| T1-11 | Valid session returns public user | `src/lib/services/persistence.test.ts` | Pass |
+| T1-12 | Unknown session returns null | `src/lib/services/persistence.test.ts` | Pass |
+| T1-13 | Expired session is removed | `src/lib/services/persistence.test.ts` | Pass |
+| T1-14 | Session destroyed on logout | `src/lib/services/persistence.test.ts` | Pass |
+| T1-15 | Valid credentials authenticate user | `src/lib/services/persistence.test.ts` | Pass |
+| T1-16 | Unknown email returns null | `src/lib/services/persistence.test.ts` | Pass |
+| T1-17 | Invalid password returns null | `src/lib/services/persistence.test.ts` | Pass |
+| T1-18 | Session cookie is HTTP-only with correct options | `src/lib/auth/current-user.test.ts` | Pass |
+| T1-19 | Session cookie cleared on logout | `src/lib/auth/current-user.test.ts` | Pass |
+
+### Phase 2: Sign Up and Sign In UI
+
+| Test ID | Scenario | File | Status |
+|---------|----------|------|--------|
+| T2-01 | Sign-up accepts valid input | `src/lib/validations/auth.test.ts` | Pass |
+| T2-02 | Sign-up requires full name | `src/lib/validations/auth.test.ts` | Pass |
+| T2-03 | Sign-up requires email | `src/lib/validations/auth.test.ts` | Pass |
+| T2-04 | Sign-up rejects invalid email | `src/lib/validations/auth.test.ts` | Pass |
+| T2-05 | Sign-up enforces password rules (length, upper, lower, number, special) | `src/lib/validations/auth.test.ts` | Pass |
+| T2-06 | Sign-up requires confirm password | `src/lib/validations/auth.test.ts` | Pass |
+| T2-07 | Sign-up rejects mismatched passwords | `src/lib/validations/auth.test.ts` | Pass |
+| T2-08 | Sign-in accepts valid input | `src/lib/validations/auth.test.ts` | Pass |
+| T2-09 | Sign-in requires email and password | `src/lib/validations/auth.test.ts` | Pass |
+| T2-10 | Sign-in rejects invalid email | `src/lib/validations/auth.test.ts` | Pass |
+| T2-11 | Sign-up action returns field errors for invalid input | `src/app/sign-up/actions.test.ts` | Pass |
+| T2-12 | Sign-up action returns email conflict error | `src/app/sign-up/actions.test.ts` | Pass |
+| T2-13 | Sign-up action returns generic error on failure | `src/app/sign-up/actions.test.ts` | Pass |
+| T2-14 | Sign-up action redirects to sign-in on success | `src/app/sign-up/actions.test.ts` | Pass |
+| T2-15 | Sign-in action returns field errors for invalid input | `src/app/sign-in/actions.test.ts` | Pass |
+| T2-16 | Sign-in action returns generic invalid credentials message | `src/app/sign-in/actions.test.ts` | Pass |
+| T2-17 | Sign-in action returns generic error on failure | `src/app/sign-in/actions.test.ts` | Pass |
+| T2-18 | Sign-in action creates session and redirects to dashboard | `src/app/sign-in/actions.test.ts` | Pass |
+| T2-19 | Sign-up form renders all required fields and sign-in link | `src/components/auth/sign-up-form.test.tsx` | Pass |
+| T2-20 | Sign-in form renders fields, button, and sign-up link | `src/components/auth/sign-in-form.test.tsx` | Pass |
+| T2-21 | Sign-in form shows registration success message | `src/components/auth/sign-in-form.test.tsx` | Pass |
+
+### Phase 3: Protected Routes and Logout
+
+| Test ID | Scenario | File | Status |
+|---------|----------|------|--------|
+| T3-01 | Logout destroys session and clears cookie | `src/app/dashboard/actions.test.ts` | Pass |
+| T3-02 | Logout clears cookie when no session exists | `src/app/dashboard/actions.test.ts` | Pass |
+| T3-03 | `getCurrentUser` returns null without cookie | `src/lib/auth/current-user.test.ts` | Pass |
+| T3-04 | `getCurrentUser` returns user for valid session | `src/lib/auth/current-user.test.ts` | Pass |
+| T3-05 | `requireAuth` redirects unauthenticated users to sign-in | `src/lib/auth/current-user.test.ts` | Pass |
+| T3-06 | `redirectIfAuthenticated` redirects to dashboard | `src/lib/auth/current-user.test.ts` | Pass |
+
+### Phase 4: End-to-End UI Verification
+
+| Test ID | Scenario | File | Status |
+|---------|----------|------|--------|
+| T4-01 | Home page renders Quiz Maker landing content | `src/app/page.test.tsx` | Pass |
+| T4-02 | Home page links to sign-up and sign-in | `src/app/page.test.tsx` | Pass |
+
+### Acceptance criteria coverage
+
+| PRD acceptance area | Covered by automated tests |
+|---------------------|---------------------------|
+| Sign Up validation and errors | T2-01 through T2-14 |
+| Sign In validation and session creation | T2-08 through T2-18 |
+| Logout | T3-01, T3-02, T1-14 |
+| Protected route helpers | T3-03 through T3-06 |
+| Password security | T1-01 through T1-06 |
+| Navigation (home → auth pages) | T4-01, T4-02 |
+
+### Manual verification still required
+
+| Scenario | Reason |
+|----------|--------|
+| Browser refresh keeps session | Requires full HTTP cookie flow |
+| Responsive layout on mobile/desktop | Visual QA |
+| Auth under `npm run preview` (Workers runtime) | Integration / E2E outside unit suite |
+| Remote D1 migrations applied before production deploy | Infrastructure step |
 
 ---
 
@@ -777,7 +877,7 @@ When implementing from this PRD:
 3. Follow project conventions: Server Actions for forms, Zod validation, shadcn/ui `field` components, `@/` imports.
 4. Enforce auth on the server for protected routes; do not rely on client-only checks.
 5. Never store or log plain-text passwords.
-6. Verify with `npm run lint`, `npm run build`, and `npm run preview` before marking work complete.
+6. Verify with `npm run lint`, `npm run build`, `npm run test`, and `npm run preview` before marking work complete.
 7. Do not apply remote database migrations; local only per project rules.
 8. Update this PRD's phase status and acceptance criteria checkboxes as work progresses.
 
@@ -785,7 +885,8 @@ When implementing from this PRD:
 
 ## Current Status
 
-**Last updated:** August 25, 2026
-**Current phase:** Authentication module complete
-**Status:** COMPLETED
+**Last updated:** September 4, 2026  
+**Current phase:** Authentication module complete (with automated test suite)  
+**Status:** COMPLETED  
+**Test status:** 54/54 automated tests passing (`npm run test`)  
 **Next steps:** Begin quiz features in a subsequent sprint.
