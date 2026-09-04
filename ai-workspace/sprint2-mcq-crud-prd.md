@@ -579,9 +579,11 @@ getDb() → D1
 
 ---
 
-### Phase 3: Frontend Architecture & UI Design — PLANNED
+### Phase 3: Frontend Architecture & UI Design — COMPLETED
 
 **Objective:** Expand the Dashboard stub into a full MCQ administration workflow with a list table, create/edit form, and actions dropdown. Client components call the Phase 2 API routes; server components handle auth gating.
+
+**Completed:** September 4, 2026
 
 **TDA — Test strategy (write these tests first):**
 
@@ -771,14 +773,14 @@ export default async function DashboardPage() {
 
 ### Phase 3 — UI
 
-- [ ] Dashboard displays a table with Question Name, Question Text, and Actions columns
-- [ ] Actions dropdown offers Edit and Delete for each row
-- [ ] "Create New Question" button navigates to the create form
-- [ ] Create/edit form shows 2 choices by default, allows adding up to 6, prevents removing below 2
-- [ ] Save submits to the API and redirects to dashboard on success
-- [ ] Cancel returns to dashboard without persisting
-- [ ] All Phase 3 component tests pass
-- [ ] `npm run lint` passes
+- [x] Dashboard displays a table with Question Name, Question Text, and Actions columns
+- [x] Actions dropdown offers Edit and Delete for each row
+- [x] "Create New Question" button navigates to the create form
+- [x] Create/edit form shows 2 choices by default, allows adding up to 6, prevents removing below 2
+- [x] Save submits to the API and redirects to dashboard on success
+- [x] Cancel returns to dashboard without persisting
+- [x] All Phase 3 component tests pass
+- [x] `npm run lint` passes
 - [ ] MCQ flows work under `npm run preview` (Workers runtime)
 
 ---
@@ -897,6 +899,6 @@ When working with this PRD:
 ## Current Status
 
 **Last Updated:** September 4, 2026
-**Current Phase:** Phase 3 — Frontend Architecture & UI Design
-**Status:** PLANNED (Phase 2 complete)
-**Next Steps:** Write failing component tests, then expand Dashboard into MCQ table and create/edit forms
+**Current Phase:** Sprint 2 complete — all three phases delivered
+**Status:** COMPLETED
+**Next Steps:** Manual QA with `npm run preview`; push and verify deployed Workers runtime
